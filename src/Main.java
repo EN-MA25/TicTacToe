@@ -21,6 +21,7 @@ public class Main {
         allowedPlaces.add("C1");
         allowedPlaces.add("C2");
         allowedPlaces.add("C3");
+        allowedPlaces.add("quit");
 
         Scanner input = new Scanner(System.in);
 
@@ -33,11 +34,14 @@ public class Main {
             String text = input.nextLine();
 
             if (allowedPlaces.contains(text)) {
-                int[] pos = cordinateToPosition(text);
+                if (text.equals("quit")) {
+                    System.exit(0);
+                }
+                Position pos = cordinateToPosition(text);
 
-                if (board[pos[0]][pos[1]] == 0) {
+                if (board[pos.getRow()][pos.getColumn()] == 0) {
                     turns++;
-                    board[pos[0]][pos[1]] = playerTurn;
+                    board[pos.getRow()][pos.getColumn()] = playerTurn;
                     playerTurn = 3 - playerTurn;
                     int winner = checkBoard();
 
@@ -110,8 +114,8 @@ public class Main {
 
     }
 
-    public static int[] cordinateToPosition(String cordinate) {
-        char[] charArray = cordinate.toCharArray();
+    public static Position cordinateToPosition(String coordinate) {
+        char[] charArray = coordinate.toCharArray();
         int column = -1;
         int row = -1;
         char columnChar = charArray[0];
@@ -126,7 +130,7 @@ public class Main {
             case '2' -> row = 1;
             case '3' -> row = 2;
         }
-        return new int[] {row, column};
+        return new Position(row, column);
 
     }
 
