@@ -8,7 +8,6 @@ public class Controller {
 
     public Controller() {
         model = new Model();
-
         playerTurn = 1;
         turns = 0;
         inputHandler = new InputHandler();
@@ -16,29 +15,30 @@ public class Controller {
     }
     private void run(){
 
-
-        //while (true) {
-           // clearScreen();
-        //    printBoard();
         while (true) {
-
 
             int input = menu();
             inputHandler.nextLine();
-            if (input == 1) {
-                choosePlayerNames();
-                clearScreen();
-                game();
-            } else if (input == 2) {
-                System.out.println("2");
-            } else {
-                System.out.println("0");
+            switch (input) {
+                case 1: {
+                    choosePlayerNames();
+                    clearScreen();
+                    game();
+                    break;
+                }
+                case 2: {
+                    System.out.println("Player Vs Computer Selected");
+                    //TODO: Set in logic for playing a computer
+                    break;
+                }
+                case 3: {
+                    System.exit(0);
+                    break;
+
+                }
             }
-
         }
-        //}
     }
-
 
     public static int menu() {
         while (true) {
@@ -59,7 +59,7 @@ public class Controller {
                     return 2;
                 }
                 case 3: {
-                    System.exit(0);
+                    return 3;
                 }
             }
         }
@@ -78,7 +78,6 @@ public class Controller {
         model.setPlayerO(playerO);
 
     }
-
 
     public static void game() {
         while (true) {
@@ -163,7 +162,6 @@ public class Controller {
             return model.getPlayerX();
         }
         return model.getPlayerO();
-
     }
 
     public static Position cordinateToPosition(String coordinate) {
@@ -183,14 +181,11 @@ public class Controller {
             case '3' -> row = 2;
         }
         return new Position(row, column);
-
     }
 
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
-
-
 
 }

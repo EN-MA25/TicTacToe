@@ -32,3 +32,4 @@ bin/
 /src/Player.class
 /src/InputHandler.class
 /src/Controller.class
+/src/Position.class

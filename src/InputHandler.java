@@ -28,11 +28,9 @@ public class InputHandler {
         } else  {
             return null;
         }
-
     }
 
     public int getInt() {
-
         if (scanner.hasNextInt()) {
             int input = scanner.nextInt();
             if (input>=1 && input <=3) {

@@ -6,6 +6,10 @@ public class Model {
     private Player playerO;
     private int round;
 
+    public int[][] board =  {{0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0}};
+
     public Model() {
         this.round = 1;
     }
@@ -34,12 +38,6 @@ public class Model {
         this.playerO = playerO;
 
     }
-
-    public int[][] board =  {{0, 0, 0},
-            {0, 0, 0},
-            {0, 0, 0}};
-
-
 
     public void clearBoard() {
         for (int[] row : board) {
