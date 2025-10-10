@@ -2,7 +2,38 @@ import java.util.Arrays;
 
 public class Model {
 
+    private Player playerX;
+    private Player playerO;
+    private int round;
 
+    public Model() {
+        this.round = 1;
+    }
+
+    public int getRound() {
+        return this.round;
+    }
+    public void nextRound() {
+        this.round++;
+    }
+    public void clearRound() {
+        this.round = 1;
+    }
+
+    public Player getPlayerX() {
+        return playerX;
+    }
+    public Player getPlayerO() {
+        return playerO;
+    }
+
+    public void setPlayerX(Player playerX) {
+        this.playerX = playerX;
+    }
+    public void setPlayerO(Player playerO) {
+        this.playerO = playerO;
+
+    }
 
     public int[][] board =  {{0, 0, 0},
             {0, 0, 0},
@@ -25,7 +56,6 @@ public class Model {
     }
 
     public int checkBoard() {
-
 
         for (int winner = 1; winner <= 2; winner++) {
             for (int i = 0; i < board[0].length; i++) {
