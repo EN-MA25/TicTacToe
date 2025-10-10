@@ -1,7 +1,6 @@
 public class Controller {
 
     static Model model; // = new Model();
-
     static int playerTurn;
     static int turns;
     static InputHandler inputHandler;

@@ -17,9 +17,11 @@ public class Model {
     public int getRound() {
         return this.round;
     }
+
     public void nextRound() {
         this.round++;
     }
+
     public void clearRound() {
         this.round = 1;
     }
@@ -27,6 +29,7 @@ public class Model {
     public Player getPlayerX() {
         return playerX;
     }
+
     public Player getPlayerO() {
         return playerO;
     }
@@ -75,6 +78,5 @@ public class Model {
             }
         }
         return 0;
-
     }
 }

@@ -3,9 +3,8 @@ import java.util.Scanner;
 
 public class InputHandler {
 
-    private static Scanner scanner = new Scanner(System.in);
-
-    private HashSet<String> allowedPlaces = new HashSet<>();
+    private static final Scanner scanner = new Scanner(System.in);
+    private final HashSet<String> allowedPlaces = new HashSet<>();
 
     public InputHandler() {
         allowedPlaces.add("A1");
