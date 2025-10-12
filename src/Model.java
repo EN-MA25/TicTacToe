@@ -6,7 +6,7 @@ public class Model {
     private Player playerO;
     private int round;
 
-    public int[][] board =  {{0, 0, 0},
+    public int[][] board = {{0, 0, 0},
             {0, 0, 0},
             {0, 0, 0}};
 
@@ -37,6 +37,7 @@ public class Model {
     public void setPlayerX(Player playerX) {
         this.playerX = playerX;
     }
+
     public void setPlayerO(Player playerO) {
         this.playerO = playerO;
 
@@ -49,34 +50,118 @@ public class Model {
     }
 
     public int getValue(Position pos) {
-        return board[pos.getRow()][pos.getColumn()];
+        return board[pos.row()][pos.column()];
     }
 
     public void setValue(Position pos, int value) {
-        board[pos.getRow()][pos.getColumn()] = value;
+        board[pos.row()][pos.column()] = value;
     }
 
-    public int checkBoard() {
+    public int checkBoard(int winner) {
 
-        for (int winner = 1; winner <= 2; winner++) {
-            for (int i = 0; i < board[0].length; i++) {
-                if (board[i][0] == winner && board[i][1] == winner  && board[i][2] == winner) {
-                    return winner;
-                }
 
-            }
-            for (int i = 0; i < board.length; i++) {
-                if (board[0][i] == winner && board[1][i] == winner  && board[2][i] == winner) {
-                    return winner;
-                }
-            }
-            if (board[0][0] == winner && board[1][1] == winner  && board[2][2] == winner) {
+        for (int i = 0; i < board[0].length; i++) {
+            if (board[i][0] == winner && board[i][1] == winner && board[i][2] == winner) {
                 return winner;
             }
-            if (board[0][2] == winner && board[1][1] == winner  && board[2][0] == winner) {
+
+        }
+        for (int i = 0; i < board.length; i++) {
+            if (board[0][i] == winner && board[1][i] == winner && board[2][i] == winner) {
                 return winner;
             }
         }
+        if (board[0][0] == winner && board[1][1] == winner && board[2][2] == winner) {
+            return winner;
+        }
+        if (board[0][2] == winner && board[1][1] == winner && board[2][0] == winner) {
+            return winner;
+        }
+
         return 0;
+    }
+
+    public Position think(boolean isHardMode) {
+
+        Position pos; // = new Position(0, 0);
+
+        // Check if computer can win
+        pos = checkValue(6);
+        if (pos != null) {
+            return pos;
+        }
+
+        // Check if computer must block
+        pos = checkValue(2);
+        if (pos != null) {
+            return pos;
+        }
+
+        // Place in middle if free
+        if (isHardMode) {
+            if (board[1][1] == 0) {
+                return new Position(1, 1);
+            }
+        }
+
+        // Check if 2 free squares
+        pos = checkValue(3);
+        if (pos != null) {
+            return pos;
+        }
+
+        // Check if 3 free squares
+        pos = checkValue(0);
+        if (pos != null) {
+            return pos;
+        }
+
+        // If all fails. Place on any random position.
+        for (int i = 0; i < board[0].length; i++) {
+            for (int j = 0; j < board[1].length; j++) {
+                if (board[i][j] == 0) {
+                    return new Position(i, j);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Position checkValue(int value) {
+        for (int i = 0; i < board[0].length; i++) {
+            if (board[i][0] + board[i][1] + board[i][2] == value) {
+
+                for (int j = 0; j < board[0].length; j++) {
+                    if (board[i][j] == 0) {
+                        return new Position(i, j);
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < board.length; i++) {
+            if (board[0][i] + board[1][i] + board[2][i] == value) {
+                for (int j = 0; j < board[0].length; j++) {
+                    if (board[j][i] == 0) {
+                        return new Position(j, i);
+                    }
+                }
+            }
+        }
+        if (board[0][0] + board[1][1] + board[2][2] == value) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[j][j] == 0) {
+                    return new Position(j, j);
+                }
+            }
+        }
+        if (board[0][2] + board[1][1] + board[2][0] == value) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[2 - j][j] == 0) {
+                    return new Position(2 - j, j);
+                }
+            }
+        }
+        return null;
     }
 }

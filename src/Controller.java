@@ -1,6 +1,6 @@
 public class Controller {
 
-    static Model model; // = new Model();
+    static Model model;
     static int playerTurn;
     static int turns;
     static InputHandler inputHandler;
@@ -20,17 +20,25 @@ public class Controller {
             inputHandler.nextLine();
             switch (input) {
                 case 1: {
-                    choosePlayerNames();
+                    choosePlayerVsPlayerNames();
                     clearScreen();
-                    game();
+                    playerVsPlayer();
                     break;
                 }
                 case 2: {
-                    System.out.println("Player Vs Computer Selected");
-                    //TODO: Set in logic for playing a computer
+                    choosePlayerVsComputerName();
+                    clearScreen();
+                    playerVsComputer(false);
                     break;
                 }
                 case 3: {
+                    choosePlayerVsComputerName();
+                    clearScreen();
+                    playerVsComputer(true);
+                    break;
+
+                }
+                case 4: {
                     System.exit(0);
                     break;
 
@@ -46,25 +54,17 @@ public class Controller {
             System.out.println("Welcome to the Game!");
             System.out.println("Menu:");
             System.out.println("1. Player Vs Player");
-            System.out.println("2. Player Vs Computer");
-            System.out.println("3. Quit");
+            System.out.println("2. Player Vs Computer Easy!");
+            System.out.println("3. Player Vs Computer Hard!");
+            System.out.println("4. Quit");
             int input = inputHandler.getInt();
-
-            switch (input) {
-                case 1: {
-                    return 1;
-                }
-                case 2: {
-                    return 2;
-                }
-                case 3: {
-                    return 3;
-                }
+            if (input != 0) {
+                return input;
             }
         }
     }
 
-    public static void choosePlayerNames() {
+    public static void choosePlayerVsPlayerNames() {
         System.out.println("Please enter name of player X:");
         String nameX = inputHandler.getName();
         System.out.println("Please enter name of player O:");
@@ -78,29 +78,44 @@ public class Controller {
 
     }
 
-    public static void game() {
+    public static void choosePlayerVsComputerName() {
+        System.out.println("Please enter your name:");
+        String nameX = inputHandler.getName();
+
+        Player playerX = new Player(nameX);
+        Player playerO = new Player("Computer");
+
+        model.setPlayerX(playerX);
+        model.setPlayerO(playerO);
+
+    }
+
+    public static void playerVsComputer(boolean isHardMode) {
         while (true) {
             clearScreen();
             printBoard();
-            System.out.println(numberToPlayer(playerTurn).getName() + ", chose a free square to place your " + numberToString(playerTurn));
-            String text = inputHandler.getString();
 
-
-            if (text != null) {
-
-                if (text.equals("QUIT")) {
-                    model.clearRound();
-                    model.clearBoard();
+            if (playerTurn == 1) {
+                if (extracted()) {
                     return;
                 }
 
-                Position pos = cordinateToPosition(text);
+            } else {
+
+                System.out.print("Computer is thinking");
+                for (int i=0; i<3; i++) {
+                    sleep();
+                    System.out.print(".");
+                }
+
+                Position pos = model.think(isHardMode);
 
                 if (model.getValue(pos) == 0) {
                     turns++;
                     model.setValue(pos, playerTurn);
-                    playerTurn = 3 - playerTurn;
-                    int winner = model.checkBoard();
+                    int winner = model.checkBoard(playerTurn);
+                    playerTurn = (playerTurn == 1) ? 3 : 1;
+
 
                     if (winner != 0) {
                         Player playerWhoWon = numberToPlayer(winner);
@@ -109,7 +124,9 @@ public class Controller {
                         printBoard();
 
 
-                        System.out.println("Congratulations! Player " + numberToPlayer(winner).getName() + " wins!");
+                        System.out.println("You lose sucker!!!!");
+
+
                         newRound();
                     } else if (turns == 9) {
                         clearScreen();
@@ -118,6 +135,68 @@ public class Controller {
                         newRound();
                     }
                 }
+
+            }
+        }
+    }
+
+    private static void sleep() {
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private static boolean extracted() {
+        System.out.println(numberToPlayer(playerTurn).getName() + ", chose a free square to place your " + numberToString(playerTurn));
+        System.out.println("(Write \"quit\" to go back to menu)");
+        String text = inputHandler.getString();
+
+        if (text != null) {
+
+            if (text.equals("QUIT")) {
+                model.clearRound();
+                model.clearBoard();
+                return true;
+            }
+
+            Position pos = cordinateToPosition(text);
+
+            if (model.getValue(pos) == 0) {
+                turns++;
+                model.setValue(pos, playerTurn);
+                int winner = model.checkBoard(playerTurn);
+                playerTurn = (playerTurn == 1) ? 3 : 1;
+
+
+                if (winner != 0) {
+                    Player playerWhoWon = numberToPlayer(winner);
+                    playerWhoWon.getPoint();
+                    clearScreen();
+                    printBoard();
+
+                    System.out.println("Congratulations! " + playerWhoWon.getName() + " wins!");
+                    newRound();
+                } else if (turns == 9) {
+                    clearScreen();
+                    printBoard();
+                    System.out.println("It is a tie!");
+                    newRound();
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void playerVsPlayer() {
+        while (true) {
+            clearScreen();
+            printBoard();
+            if (extracted()) {
+                return;
             }
         }
     }
@@ -127,7 +206,7 @@ public class Controller {
         model.clearBoard();
         turns = 0;
         model.nextRound();
-        playerTurn = 2 - model.getRound() % 2;
+        playerTurn = (model.getRound() % 2 == 0) ? 3 : 1;
     }
 
     public static void printBoard() {
@@ -151,7 +230,7 @@ public class Controller {
         return switch (number) {
             case 0 -> " ";
             case 1 -> "X";
-            case 2 -> "O";
+            case 3 -> "O";
             default -> "";
         };
     }

@@ -32,7 +32,7 @@ public class InputHandler {
     public int getInt() {
         if (scanner.hasNextInt()) {
             int input = scanner.nextInt();
-            if (input>=1 && input <=3) {
+            if (input>=1 && input <=4) {
                 return input;
             }
         }
