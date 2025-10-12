@@ -6,6 +6,7 @@ public class InputHandler {
     private static final Scanner scanner = new Scanner(System.in);
     private final HashSet<String> allowedPlaces = new HashSet<>();
 
+    // Init method to add the allowed inputs in a Set
     public InputHandler() {
         allowedPlaces.add("A1");
         allowedPlaces.add("A2");
@@ -19,6 +20,7 @@ public class InputHandler {
         allowedPlaces.add("QUIT");
     }
 
+    // Get a String that exist in the allowedPlaces
     public String getString() {
         String inputText = scanner.nextLine();
         inputText = inputText.toUpperCase();
@@ -29,6 +31,8 @@ public class InputHandler {
         }
     }
 
+    // Get an int from 1-4 for the menu.
+    // 0 Is returned if it fails
     public int getInt() {
         if (scanner.hasNextInt()) {
             int input = scanner.nextInt();
@@ -40,10 +44,12 @@ public class InputHandler {
         return 0;
     }
 
+    // Get name with no error handling
     public String getName() {
         return scanner.nextLine();
     }
 
+    // Flush the scanner
     public void nextLine() {
         scanner.nextLine();
     }

@@ -2,18 +2,26 @@ import java.util.Arrays;
 
 public class Model {
 
+    // The game model that holds the 2 players. Which round it is and the state of the board
+
     private Player playerX;
     private Player playerO;
     private int round;
 
+    // The board state
+    // 0 means free square
+    // 1 means X and is always used by a player
+    // 3 means O and can be used by computer
     public int[][] board = {{0, 0, 0},
             {0, 0, 0},
             {0, 0, 0}};
 
+    // Init method
     public Model() {
         this.round = 1;
     }
 
+    // Setters and getters
     public int getRound() {
         return this.round;
     }
@@ -57,8 +65,8 @@ public class Model {
         board[pos.row()][pos.column()] = value;
     }
 
+    // Method to check if we have a winner
     public int checkBoard(int winner) {
-
 
         for (int i = 0; i < board[0].length; i++) {
             if (board[i][0] == winner && board[i][1] == winner && board[i][2] == winner) {
@@ -81,6 +89,7 @@ public class Model {
         return 0;
     }
 
+    // The think method is used when computer should make a move
     public Position think(boolean isHardMode) {
 
         Position pos; // = new Position(0, 0);
@@ -128,7 +137,11 @@ public class Model {
         return null;
     }
 
+    // Method to see the values in rows, columns and the 2 diagonals
+    // If found the position will be returned, null if not.
     public Position checkValue(int value) {
+
+        // Each row
         for (int i = 0; i < board[0].length; i++) {
             if (board[i][0] + board[i][1] + board[i][2] == value) {
 
@@ -139,6 +152,8 @@ public class Model {
                 }
             }
         }
+
+        // Each Column
         for (int i = 0; i < board.length; i++) {
             if (board[0][i] + board[1][i] + board[2][i] == value) {
                 for (int j = 0; j < board[0].length; j++) {
@@ -148,6 +163,8 @@ public class Model {
                 }
             }
         }
+
+        // One diagonal
         if (board[0][0] + board[1][1] + board[2][2] == value) {
             for (int j = 0; j < board[0].length; j++) {
                 if (board[j][j] == 0) {
@@ -155,6 +172,8 @@ public class Model {
                 }
             }
         }
+
+        // The other diagonal
         if (board[0][2] + board[1][1] + board[2][0] == value) {
             for (int j = 0; j < board[0].length; j++) {
                 if (board[2 - j][j] == 0) {

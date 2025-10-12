@@ -1,5 +1,6 @@
 public class Player {
 
+    // Player class that has current Score and Name
     private final String name;
     private int score;
     public Player(String name) {
@@ -13,6 +14,8 @@ public class Player {
     public int getScore() {
         return score;
     }
+
+    // Method to increase the Players Score
     public void getPoint() {
         this.score += 1;
     }
